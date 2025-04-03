@@ -1,1 +1,0 @@
-# Coure-Technologies-task
