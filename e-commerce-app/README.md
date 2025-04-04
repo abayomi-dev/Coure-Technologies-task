@@ -115,10 +115,10 @@ spec:
         accessModes: [ "ReadWriteOnce" ]
         resources:
           requests:
-            storage: 10Gi
+            storage: 10Gi 
 
 🧩 Snippet illustrating this
-yaml
+``` yaml
 copy
 edit
 # infra/argocd/applications/prod.yaml
@@ -134,7 +134,7 @@ spec:
     path: infra/helm/prod
   destination:
     server: https://kubernetes.default.svc
-    namespace: prod
+    namespace: prod 
 Use a Gitflow branching model (either from concurrent environment or feature development):
 
 - `master/main`: For production-ready code.
