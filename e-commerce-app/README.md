@@ -116,7 +116,7 @@ spec:
         resources:
           requests:
             storage: 10Gi 
-
+```
 🧩 Snippet illustrating this
 ```yaml
 # infra/argocd/applications/prod.yaml
@@ -133,7 +133,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: prod 
-    
+```
 Use a Gitflow branching model (either from concurrent environment or feature development):
 
 - `master/main`: For production-ready code.
