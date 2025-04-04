@@ -118,9 +118,7 @@ spec:
             storage: 10Gi 
 
 🧩 Snippet illustrating this
-``` yaml
-copy
-edit
+```yaml
 # infra/argocd/applications/prod.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
@@ -135,6 +133,7 @@ spec:
   destination:
     server: https://kubernetes.default.svc
     namespace: prod 
+    
 Use a Gitflow branching model (either from concurrent environment or feature development):
 
 - `master/main`: For production-ready code.
