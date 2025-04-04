@@ -8,9 +8,15 @@
 - Setting up alerts and monitoring systems to address issues in production and critical network environments.  
 
 ## QUESTIONS AND SOLUTIONS  
-First of all, We setup two architectural diagrams as well as schematics and skeletall files structures to show a practical way of tackling issues raised here, we have the .github files ti host the CICD pipelines, as wekk as the app folder for the applications source code services which inckudes deployment and dockerfiles fornthe working and building of the application, we also have infrasrtuctres files fir the provisioning if an =y VM neccesary as well as the use of monitoring scriots for kig collection and dashboards, also we use the scripts to work on file deployments and rollbakcs,
+First of all, We setup two architectural diagrams as well as schematics and skeletal files structures to show a practical way of tackling issues raised here.</br>
+We have the **`.github`** files to host the CICD pipelines, as well as the **`/app`** folder for the applications source code services which includes **Deployment and Dockerfiles** for the working and building of the application.</br>
+We also have infrastructure files for the provisioning of any VM Resource neccesary as well as the use of monitoring scripts for log collection and dashboards, also with the use of scripts to work on file deployments and rollbacks.</br>
 
-These are necessary to working on all the applkications and problems to ensure a smooth easy and highly resilient infrast=ructure with ease if deployment faster and accurate enviironmental segregation using git branches and namespaces as well as the reduction in production issues(either to resources or to services) running the applications so as to also prevent meory leaks and have a clster wide robust nmontioring and alerting mechanismn, Below are the soltions to the ASSESSMENT.
+These are necessary to working on all the applications and problems to ensure a smooth easy and highly resilient infrastructure with ease of deployment, **faster** & accurate environmental segregation using git branches and namespaces.
+
+As well as the reduction in production issues(either to resources or to services) running the applications so as to also prevent memory leaks and have a **cluster-wide** robust monitoring and alerting mechanism.
+
+**BELOW ARE SOLUTIONS TO THE ASSESSMENT**</br>
 ### ARCHITECTURAL OVERVIEW  
 For the Kubernetes cluster design, including the number of nodes, node pools, resource allocation, network design, and storage considerations, refer to the diagram below:  
 
@@ -61,9 +67,11 @@ In this setup, we employ a **three-node pool strategy** to ensure high availabil
 ---
 
 ### CI/CD PIPELINE DESIGN  
-
+**[CICD PIPELINE ILLUSTRATION](images/cicd.drawio.png)**  
+In this Pipeline example we see how the python and Javascript workflow was designed using prettier for code validation and then approved by a management team or whoever has permissions and if not approved we head back to the work item. </br>
+When tested as seen in the first CI stage using the SNYK and Sonarqube tools for SAST, we then deploy using branching styles from main branch to production and Dev/feature branch to alternate staging environment.</br>
 #### **Code Validation**  
-- Prettier and ESLint for formatting and linting, depending on Personal preference and prokects requirements
+- Prettier and ESLint for formatting and linting, depending on Personal preference and projects requirements
 
 #### **Security Scanning**  
 - Integrate **Snyk** or **Trivy** for Docker image and Kubernetes manifest security scanning.  
@@ -85,7 +93,36 @@ In this setup, we employ a **three-node pool strategy** to ensure high availabil
 
 ### GITOPS APPROACH  
 **Branch Strategy</br>**
+</pre>``` # infra/helm/mongodb/templates/statefulset.yaml
+kind: StatefulSet
+spec:
+  replicas: 3
+  volumeClaimTemplates:
+    - metadata:
+        name: mongodb-data
+      spec:
+        storageClassName: "gp2"
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 10Gi
+```</pre> </br>
 
+**Snippet illustrating this**
+</pre>``` # infra/argocd/applications/prod.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: ecommerce-prod
+spec:
+  project: default
+  source:
+    repoURL: https://github.com/your-username/ecommerce-k8s-modernization
+    targetRevision: main
+    path: infra/helm/prod
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: prod```</pre>
 Use a Gitflow branching model(either from concurrent environment or features development):
 
 Master/Main: For production-ready code.
@@ -94,14 +131,21 @@ Feature branches: For individual features or bug fixes.
 
 Environment Promotion
 Implement GitOps using tools like ArgoCD in this case, This ensures that the code automatically deploys to different environments based on the branch, we setup branche thast deployes the features into the respective envioronemt due to the branching.
-```Main----------------->Production Ready Environment probable segreageted by uts environment or namespaces</br>```
-   ```Dev branch<---->Develop environemts </br>```
-   ```Test branches<----> Test enbironejmtns either for features of integrated tests on a service feature etc</br>```
+`Main <----> Production Ready Environment probable segreageted by uts environment or namespaces.`</br>
+`Dev branch <----> Develop environemts.`</br>
+`Test branches <----> Test environments either for features or integrated tests on a service feature etc.`</br>
 
-**Configuration Management**
+**Configuration Management**</br>
 Use Kubernetes ConfigMaps and Secrets to store configuration variables (e.g., API keys, database credentials).
 We deploy the ap[plication by making changes into the repository hosting the source codes and then we deploy the changes on our repository which  auto reflects on our argocd dashboard after propeerrly setting up the necessay kustomize files as seen in the files structures showing a skeletal of how this process might have been when setup.</br>
 Store environment-specific configurations in separate files or branches to ensure they don’t leak into production.
-**Change Approval Process**
+**Change Approval Process**</br>
 Integrate Pull Request (PR) Reviews for code changes.
 We Use tools like ArgoCD to automatically apply changes to the Kubernetes cluster once the PR is merged.
+
+# PAIN POINTS
+- With the keen and simplicication of the workflow using the afore mentioned guidelines we should estasblish a faster and more in sync cluser setup that works for fast deployment using argocd and helm.</br>
+- Proper Monitoring is implemented to address the issues regarding late discovery of production issues with proper system and service metrics set up  with log aggregation tools to alert if a log throws a certain error or on a system/service/resource downtime.</br>
+- To Address resource leaks with Resource limits and Prometheus alerts to assist with this failure.</br>
+-  Isolated staging environemt with the right branching strategy will address issue of inconstent or no staging environment using the GitOps process.</br>
+---
