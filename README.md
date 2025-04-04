@@ -25,7 +25,7 @@ As well as the reduction in production issues (either to resources or to service
 ### 🏗️ ARCHITECTURAL OVERVIEW  
 For the Kubernetes cluster design, including the number of nodes, node pools, resource allocation, network design, and storage considerations, refer to the diagram below:  
 
-📎 **[Application Architectural Diagram](images/Coure.drawio.png)**  
+📎 **[Application Architectural Diagram](/e-commerce-app/images/Coure.drawio.png)**  
 
 In this setup, we employ a **three-node pool strategy** to ensure high availability and redundancy, suitable for both on-premise and cloud deployments. Key design principles include:  
 
@@ -72,7 +72,7 @@ In this setup, we employ a **three-node pool strategy** to ensure high availabil
 ---
 
 ### 🚀 CI/CD PIPELINE DESIGN  
-📎 **[CI/CD Pipeline Illustration](images/cicd.drawio.png)**  
+📎 **[CI/CD Pipeline Illustration](/e-commerce-app/images/cicd.drawio.png)**  
 
 In this pipeline example we see how the Python and JavaScript workflow was designed using Prettier for code validation and then approved by a management team or whoever has permissions. If not approved, we head back to the work item.  
 When tested, as seen in the first CI stage using the **Snyk** and **SonarQube** tools for SAST, we then deploy using branching styles from `main` branch to production and `dev/feature` branch to alternate staging environment.  
